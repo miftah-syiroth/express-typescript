@@ -39,7 +39,10 @@ export class CategoryService {
 
         const existingCategory = await prismaClient.category.findFirst({
             where: {
-                name: validated.name,
+                name: {
+                    contains: validated.name,
+                    mode: "insensitive"
+                },
             },
         });
 

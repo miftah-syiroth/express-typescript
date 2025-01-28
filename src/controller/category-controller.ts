@@ -1,9 +1,10 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { CreateCategoryRequest, SearchCategoryRequest, UpdateCategoryRequest } from "../model/category-model";
 import { CategoryService } from "../service/category-service";
+import { UserRequest } from "../type/user-request";
 
 export class CategoryController{
-    static async search(req: Request, res: Response, next: NextFunction){
+    static async search(req: UserRequest, res: Response, next: NextFunction){
         try {
             const request: SearchCategoryRequest = req.body as SearchCategoryRequest;
             const response = await CategoryService.search(request);
@@ -15,7 +16,7 @@ export class CategoryController{
         }
     }
 
-    static async store(req: Request, res: Response, next: NextFunction){
+    static async store(req: UserRequest, res: Response, next: NextFunction){
         try {
             const request: CreateCategoryRequest = req.body as CreateCategoryRequest;
             const response = await CategoryService.store(request);
@@ -27,7 +28,7 @@ export class CategoryController{
         }
     }
 
-    static async update(req: Request, res: Response, next: NextFunction){
+    static async update(req: UserRequest, res: Response, next: NextFunction){
         try {
             const request: UpdateCategoryRequest = req.body as UpdateCategoryRequest;
             request.id = req.params.categoryId;
@@ -41,7 +42,7 @@ export class CategoryController{
         }
     }
 
-    static async destroy(req: Request, res: Response, next: NextFunction){
+    static async destroy(req: UserRequest, res: Response, next: NextFunction){
         try {
             const categoryId = req.params.categoryId;
             await CategoryService.destroy(categoryId);
