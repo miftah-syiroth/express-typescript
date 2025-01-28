@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider = "prisma-client-js"
+    previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Tag {
+    id   String @id @default(uuid())
+    name String @db.VarChar(255)
+
+    posts Post[]
+}
+
+model Image {
+    id       String @id @default(uuid())
+    filename String @db.VarChar(255)
+    path     String @db.VarChar(255)
+
+    postId String
+    post   Post   @relation(fields: [postId], references: [id])
+}
+
+model Post {
+    id        String    @id @default(uuid())
+    title     String    @db.VarChar(255)
+    content   String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt
+
+    category   Category @relation(fields: [categoryId], references: [id])
+    categoryId String
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+
+    images Image[]
+    tags   Tag[]
+}
+
+model User {
+    id       String  @id @default(uuid())
+    email    String  @unique
+    name     String?
+    password String?
+
+    roles Role[]
+    posts Post[]
+}
+
+model Category {
+    id   String @id @default(uuid())
+    name String @db.VarChar(255)
+
+    posts Post[]
+}
+
+model Role {
+    id   String @id @default(uuid())
+    name String @db.VarChar(255)
+
+    users User[]
+}
