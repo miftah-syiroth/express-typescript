@@ -40,4 +40,16 @@ export class CategoryController{
             next(error);
         }
     }
+
+    static async destroy(req: Request, res: Response, next: NextFunction){
+        try {
+            const categoryId = req.params.categoryId;
+            await CategoryService.destroy(categoryId);
+            res.status(200).json({
+                data: "OK"
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
 }

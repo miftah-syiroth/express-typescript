@@ -88,4 +88,28 @@ export class CategoryService {
 
         return toCategoryResponse(updatedCategory);
     }
+
+    static async destroy(id: string): Promise<CategoryResponse> {
+        // check if category exists
+        await this.checkIfCategoryExists(id);
+
+        // if category used by post, throw error
+        const posts_count = await prismaClient.post.count({
+            where: {
+                categoryId: id,
+            },
+        });
+
+        if (posts_count > 0) {
+            throw new ResponseError(400, "Category is used by post");
+        }
+
+        const category = await prismaClient.category.delete({
+            where: {
+                id: id,
+            },
+        });
+
+        return toCategoryResponse(category);
+    }
 }
