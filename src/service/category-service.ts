@@ -12,7 +12,6 @@ import { CategoryValidation } from "../validation/category-validation";
 import { Validation } from "../validation/validation";
 
 export class CategoryService {
-    // get ini seperti search, jadi ada parameter yang bisa diisi
     static async search(
         req: SearchCategoryRequest
     ): Promise<Array<CategoryResponse>> {
@@ -26,7 +25,6 @@ export class CategoryService {
               }
             : {};
 
-        // Query Prisma dengan filter
         const categories = await prismaClient.category.findMany({
             where: filters,
         });
@@ -55,8 +53,6 @@ export class CategoryService {
                 name: validated.name,
             },
         });
-        console.log("Creating category..." + newCategory);
-
         return toCategoryResponse(newCategory);
     }
 
